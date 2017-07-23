@@ -1,0 +1,8 @@
+*.o
+*.crf
+*.d
+*.lnp
+*.htm
+*.dep
+RAK_mine1.0/RAK_mine1.sct
+*.map
