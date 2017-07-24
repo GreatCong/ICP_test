@@ -58,7 +58,7 @@ void _sys_exit(int x)
  //重定义fputc函数 
 int fputc(int ch, FILE *f)
 { 	
-  HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,5);
+  HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,2);
 	return ch;
 }
 #endif
