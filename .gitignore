@@ -2,7 +2,10 @@
 *.crf
 *.d
 *.lnp
-*.htm
 *.dep
 RAK_mine1.0/RAK_mine1.sct
 *.map
+
+#ignore the debug file
+/RAK_mine1.0/MDK-ARM/RAK_mine1.0/
+*.bak

@@ -69,40 +69,54 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GSPI1_PWD_GPIO_Port, GSPI1_PWD_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GSPI3_PWD_GPIO_Port, GSPI3_PWD_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, BT_EN_Pin|LED_RED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GSPI1_CS_Pin|WIFI_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GSPI3_CS_Pin|WIFI_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = GSPI1_PWD_Pin;
+  GPIO_InitStruct.Pin = GSPI3_PWD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GSPI1_PWD_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_PWD_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAPin PAPin */
-  GPIO_InitStruct.Pin = BT_EN_Pin|LED_RED_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = BT_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(BT_EN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = LED_RED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_RED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = GSPI1_INT_Pin;
+  GPIO_InitStruct.Pin = GSPI3_INT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GSPI1_INT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = GSPI1_CS_Pin|WIFI_EN_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = GSPI3_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = WIFI_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(WIFI_EN_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);

@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : main.h
-  * Description        : This file contains the common defines of the application
+  * File Name          : ADC.h
+  * Description        : This file provides code for the configuration
+  *                      of the ADC instances.
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -36,53 +37,45 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
-  /* Includes ------------------------------------------------------------------*/
+#ifndef __adc_H
+#define __adc_H
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_hal.h"
+#include "main.h"
 
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
-/* Private define ------------------------------------------------------------*/
-
-#define GSPI3_PWD_Pin GPIO_PIN_3
-#define GSPI3_PWD_GPIO_Port GPIOC
-#define BAT_ADC1_Pin GPIO_PIN_0
-#define BAT_ADC1_GPIO_Port GPIOA
-#define BT_EN_Pin GPIO_PIN_1
-#define BT_EN_GPIO_Port GPIOA
-#define LED_RED_Pin GPIO_PIN_8
-#define LED_RED_GPIO_Port GPIOA
-#define GSPI3_SCK_Pin GPIO_PIN_3
-#define GSPI3_SCK_GPIO_Port GPIOB
-#define GSPI3_MISO_Pin GPIO_PIN_4
-#define GSPI3_MISO_GPIO_Port GPIOB
-#define GSP3_MOSI_Pin GPIO_PIN_5
-#define GSP3_MOSI_GPIO_Port GPIOB
-#define GSPI3_INT_Pin GPIO_PIN_6
-#define GSPI3_INT_GPIO_Port GPIOB
-#define GSPI3_INT_EXTI_IRQn EXTI9_5_IRQn
-#define GSPI3_CS_Pin GPIO_PIN_7
-#define GSPI3_CS_GPIO_Port GPIOB
-#define WIFI_EN_Pin GPIO_PIN_9
-#define WIFI_EN_GPIO_Port GPIOB
+extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN Private defines */
-#define WIFI_SPI                             SPI3
+
 /* USER CODE END Private defines */
 
-void _Error_Handler(char *, int);
+extern void _Error_Handler(char *, int);
 
-#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
+void MX_ADC1_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+
+/* USER CODE END Prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+#endif /*__ adc_H */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-*/ 
+  */
 
-#endif /* __MAIN_H */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

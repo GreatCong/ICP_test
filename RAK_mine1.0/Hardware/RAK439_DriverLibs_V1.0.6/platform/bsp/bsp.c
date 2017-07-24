@@ -68,10 +68,10 @@ void SPIx_Error(void)
 {
     printf("SPIx_Error\r\n");
     /* De-initialize the SPI communication BUS */
-    HAL_SPI_DeInit(&hspi1);
+    HAL_SPI_DeInit(&hspi3);
 
     /* Re- Initialize the SPI communication BUS */
-    MX_SPI1_Init();
+    MX_SPI3_Init();
 }
 
 //  @ fuction:  
@@ -88,37 +88,37 @@ GPIO_InitTypeDef GPIO_InitStruct;
 	__HAL_RCC_GPIOH_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GSPI1_PWD_GPIO_Port, GSPI1_PWD_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GSPI3_PWD_GPIO_Port, GSPI3_PWD_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GSPI1_CS_GPIO_Port, GSPI1_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GSPI3_CS_GPIO_Port, GSPI3_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = GSPI1_PWD_Pin;
+  GPIO_InitStruct.Pin = GSPI3_PWD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GSPI1_PWD_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_PWD_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = GSPI1_INT_Pin;
+  GPIO_InitStruct.Pin = GSPI3_INT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GSPI1_INT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_INT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = GSPI1_CS_Pin;
+  GPIO_InitStruct.Pin = GSPI3_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GSPI1_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GSPI3_CS_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 	
-	HAL_GPIO_WritePin(GSPI1_PWD_GPIO_Port, GSPI1_PWD_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GSPI1_CS_GPIO_Port, GSPI1_CS_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GSPI3_PWD_GPIO_Port, GSPI3_PWD_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GSPI3_CS_GPIO_Port, GSPI3_CS_Pin, GPIO_PIN_SET);
 	
 }
 
@@ -128,7 +128,7 @@ GPIO_InitTypeDef GPIO_InitStruct;
 //  @ output:
 //  @ note: 
 void WIFI_SPI_Init(void){
-  MX_SPI1_Init();
+  MX_SPI3_Init();
 } 
 
 //  @ fuction:  
@@ -137,7 +137,7 @@ void WIFI_SPI_Init(void){
 //  @ output:
 //  @ note: 
 void WIFI_SPI_Deinit(void){
-  HAL_SPI_DeInit(&hspi1);
+  HAL_SPI_DeInit(&hspi3);
 }
 
 /*END defines*/

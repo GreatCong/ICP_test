@@ -36,6 +36,7 @@ static void scan_callback(rw_WlanNetworkInfoList_t* scan_info)
 
 static void connect_callback(uint8_t event ,  rw_WlanConnect_t* wlan_info, RW_DISCONNECT_REASON dis_code)//连接回调
 {
+	  //uint8_t my_addr[4] = {0};
     DPRINTF("connect_callback event = 0x%x\r\n", event);
     switch(event) {
         case CONN_STATUS_STA_CONNECTED://成功连接上路由器
@@ -65,6 +66,20 @@ static void connect_callback(uint8_t event ,  rw_WlanConnect_t* wlan_info, RW_DI
         case CONN_STATUS_AP_ESTABLISH://AP建立成功
 					  app_demo_ctx.rw_connect_status = STATUS_OK;
             DPRINTF("---------CONN_STATUS_AP_ESTABLISH--------\r\n");
+//				    my_addr[0] = (uint8_t)(My_setIP.addr >> 24);
+//						my_addr[1] = (uint8_t)(My_setIP.addr >> 16);
+//						my_addr[2] = (uint8_t)(My_setIP.addr >> 8);
+//						my_addr[3] = (uint8_t)(My_setIP.addr >> 0) ;
+//							          
+//					  app_demo_ctx.rw_connect_status = STATUS_OK;
+//            DPRINTF("---------CONN_STATUS_AP_ESTABLISH--------\r\n");
+//						
+//            DPRINTF("channel =%d\r\n", conn.channel);
+//            DPRINTF("ssid =%s\r\n", conn.ssid);
+//            DPRINTF("psk =%s\r\n", conn.psk);
+//            DPRINTF("sec_mode =%d\r\n", conn.sec_mode);
+//            DPRINTF("auth_mode =%d\r\n", conn.auth_mode); 
+//						DPRINTF("ESTABLISHED AP addr = 0x%x(%d.%d.%d.%d)\r\n", My_setIP.addr,my_addr[0],my_addr[1],my_addr[2],my_addr[3]);
             break;
         case CONN_STATUS_AP_CLT_CONNECTED://有客户端连接到AP
             DPRINTF("---------CONN_STATUS_AP_CLT_CONNECTED--------\r\n");
@@ -80,9 +95,17 @@ static void connect_callback(uint8_t event ,  rw_WlanConnect_t* wlan_info, RW_DI
 
 static void ip_callback(rw_IpConfig_t* ip_addr, int status)
 {
+	  uint8_t my_addr[4] = {0};
     if(status ==RW_OK)
     {
-       DPRINTF("ipquery success addr = 0x%x\r\n", ip_addr->addr);
+      //debug start
+			my_addr[0] = (uint8_t)(ip_addr->addr >> 24);
+			my_addr[1] = (uint8_t)(ip_addr->addr >> 16);
+			my_addr[2] = (uint8_t)(ip_addr->addr >> 8);
+			my_addr[3] = (uint8_t)(ip_addr->addr >> 0) ;
+			DPRINTF("ipquery success addr = 0x%x(%d.%d.%d.%d)\r\n", ip_addr->addr,my_addr[0],my_addr[1],my_addr[2],my_addr[3]);
+			//debug end
+       //DPRINTF("ipquery success addr = 0x%x\r\n", ip_addr->addr);
        app_demo_ctx.rw_ipquery_status =STATUS_OK; 
     }else
     {   
@@ -155,7 +178,7 @@ static void customer_assert(const char* file, int line)
 //}
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == GSPI1_INT_Pin)
+  if (GPIO_Pin == GSPI3_INT_Pin)
   {
 		DRIVER_INT_HANDLE();
   }
@@ -301,10 +324,10 @@ static void _spi_io_buffer(uint8_t* write, uint8_t* read, uint16_t len)
 	if(read == NULL) {
 			for(i=0;i<len;i++) {
 				if(write == NULL) {
-					status = HAL_SPI_TransmitReceive(&hspi1,&dummy,&recv,1,5000);
+					status = HAL_SPI_TransmitReceive(&hspi3,&dummy,&recv,1,5000);
 					assert_param(status == HAL_OK);
 				}else {
-					status = HAL_SPI_TransmitReceive(&hspi1,&write[i],&recv,1,5000);
+					status = HAL_SPI_TransmitReceive(&hspi3,&write[i],&recv,1,5000);
 					assert_param(status == HAL_OK);
 				}
 			}
@@ -312,10 +335,10 @@ static void _spi_io_buffer(uint8_t* write, uint8_t* read, uint16_t len)
 		else {
 			for(i=0;i<len;i++) {
 				if(write == NULL) {
-					status = HAL_SPI_TransmitReceive(&hspi1,&dummy,&read[i],1,5000);
+					status = HAL_SPI_TransmitReceive(&hspi3,&dummy,&read[i],1,5000);
 					assert_param(status == HAL_OK);				
 				}else {
-					status = HAL_SPI_TransmitReceive(&hspi1,&write[i],&read[i],1,5000);		
+					status = HAL_SPI_TransmitReceive(&hspi3,&write[i],&read[i],1,5000);		
 					assert_param(status == HAL_OK);
 				}
 			}
@@ -327,10 +350,10 @@ static void _spi_io_buffer(uint8_t* write, uint8_t* read, uint16_t len)
 static void _ext_interrupt(uint8_t enable)
 {
     if (enable){
-        NVIC_EnableIRQ(GSPI1_INT_EXTI_IRQn);
+        NVIC_EnableIRQ(GSPI3_INT_EXTI_IRQn);
     }
     else{
-        NVIC_DisableIRQ(GSPI1_INT_EXTI_IRQn);
+        NVIC_DisableIRQ(GSPI3_INT_EXTI_IRQn);
     }   
 }
 

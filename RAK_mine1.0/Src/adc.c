@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : SPI.c
+  * File Name          : ADC.c
   * Description        : This file provides code for the configuration
-  *                      of the SPI instances.
+  *                      of the ADC instances.
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -38,7 +38,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi.h"
+#include "adc.h"
 
 #include "gpio.h"
 
@@ -46,82 +46,89 @@
 
 /* USER CODE END 0 */
 
-SPI_HandleTypeDef hspi3;
+ADC_HandleTypeDef hadc1;
 
-/* SPI3 init function */
-void MX_SPI3_Init(void)
+/* ADC1 init function */
+void MX_ADC1_Init(void)
 {
+  ADC_ChannelConfTypeDef sConfig;
 
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
-  hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
-  hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi3.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi3) != HAL_OK)
+    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+    */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
+    */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
 
 }
 
-void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
+void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct;
-  if(spiHandle->Instance==SPI3)
+  if(adcHandle->Instance==ADC1)
   {
-  /* USER CODE BEGIN SPI3_MspInit 0 */
+  /* USER CODE BEGIN ADC1_MspInit 0 */
 
-  /* USER CODE END SPI3_MspInit 0 */
-    /* SPI3 clock enable */
-    __HAL_RCC_SPI3_CLK_ENABLE();
+  /* USER CODE END ADC1_MspInit 0 */
+    /* ADC1 clock enable */
+    __HAL_RCC_ADC1_CLK_ENABLE();
   
-    /**SPI3 GPIO Configuration    
-    PB3     ------> SPI3_SCK
-    PB4     ------> SPI3_MISO
-    PB5     ------> SPI3_MOSI 
+    /**ADC1 GPIO Configuration    
+    PA0-WKUP     ------> ADC1_IN0 
     */
-    GPIO_InitStruct.Pin = GSPI3_SCK_Pin|GSPI3_MISO_Pin|GSP3_MOSI_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = BAT_ADC1_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(BAT_ADC1_GPIO_Port, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN SPI3_MspInit 1 */
+  /* USER CODE BEGIN ADC1_MspInit 1 */
 
-  /* USER CODE END SPI3_MspInit 1 */
+  /* USER CODE END ADC1_MspInit 1 */
   }
 }
 
-void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 {
 
-  if(spiHandle->Instance==SPI3)
+  if(adcHandle->Instance==ADC1)
   {
-  /* USER CODE BEGIN SPI3_MspDeInit 0 */
+  /* USER CODE BEGIN ADC1_MspDeInit 0 */
 
-  /* USER CODE END SPI3_MspDeInit 0 */
+  /* USER CODE END ADC1_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_SPI3_CLK_DISABLE();
+    __HAL_RCC_ADC1_CLK_DISABLE();
   
-    /**SPI3 GPIO Configuration    
-    PB3     ------> SPI3_SCK
-    PB4     ------> SPI3_MISO
-    PB5     ------> SPI3_MOSI 
+    /**ADC1 GPIO Configuration    
+    PA0-WKUP     ------> ADC1_IN0 
     */
-    HAL_GPIO_DeInit(GPIOB, GSPI3_SCK_Pin|GSPI3_MISO_Pin|GSP3_MOSI_Pin);
+    HAL_GPIO_DeInit(BAT_ADC1_GPIO_Port, BAT_ADC1_Pin);
 
-  /* USER CODE BEGIN SPI3_MspDeInit 1 */
+  /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
-  /* USER CODE END SPI3_MspDeInit 1 */
+  /* USER CODE END ADC1_MspDeInit 1 */
   }
 } 
 

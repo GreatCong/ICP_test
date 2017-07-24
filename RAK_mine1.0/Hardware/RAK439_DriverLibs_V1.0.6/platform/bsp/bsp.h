@@ -115,13 +115,13 @@ uint32_t HAL_GetTick(void);
 
 /*reference bsp function*/
 
-#define BSP_WIFIPWD_Up() 	HAL_GPIO_WritePin(GSPI1_PWD_GPIO_Port, GSPI1_PWD_Pin, GPIO_PIN_SET) 
+#define BSP_WIFIPWD_Up() 	HAL_GPIO_WritePin(GSPI3_PWD_GPIO_Port, GSPI3_PWD_Pin, GPIO_PIN_SET) 
 
-#define BSP_WIFIPWD_Down() 	HAL_GPIO_WritePin(GSPI1_PWD_GPIO_Port, GSPI1_PWD_Pin, GPIO_PIN_RESET)
+#define BSP_WIFIPWD_Down() 	HAL_GPIO_WritePin(GSPI3_PWD_GPIO_Port, GSPI3_PWD_Pin, GPIO_PIN_RESET)
 
-#define BSP_WIFICS_Up()		HAL_GPIO_WritePin(GSPI1_CS_GPIO_Port, GSPI1_CS_Pin, GPIO_PIN_SET)
+#define BSP_WIFICS_Up()		HAL_GPIO_WritePin(GSPI3_CS_GPIO_Port, GSPI3_CS_Pin, GPIO_PIN_SET)
 
-#define BSP_WIFICS_Down() 	HAL_GPIO_WritePin(GSPI1_CS_GPIO_Port, GSPI1_CS_Pin, GPIO_PIN_RESET)
+#define BSP_WIFICS_Down() 	HAL_GPIO_WritePin(GSPI3_CS_GPIO_Port, GSPI3_CS_Pin, GPIO_PIN_RESET)
 
 
 

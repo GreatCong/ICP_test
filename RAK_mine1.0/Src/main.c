@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "adc.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -87,6 +88,33 @@ int platform_init(void)
   
   return RW_OK;
 }
+
+//  @ fuction:  
+//  @ description:  
+//  @ input:
+//  @ output:
+//  @ note: 测试电池电压
+void BAT_ADC_test(void){
+	  uint16_t AD_value = 0;
+	  float AD_transfer = 0;
+	
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1,50);//等待转换完成
+		if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1),HAL_ADC_STATE_EOC_REG)){
+		AD_value = HAL_ADC_GetValue(&hadc1);
+	  AD_transfer = AD_value*3.3/0xfff;
+			printf("%d ADC=%fv ",AD_value,AD_transfer);
+		}
+		if(AD_transfer < 3.0f){
+			HAL_GPIO_WritePin(BT_EN_GPIO_Port,BT_EN_Pin,GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(WIFI_EN_GPIO_Port,WIFI_EN_Pin,GPIO_PIN_RESET);
+		 while(1){
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
+		  HAL_Delay(5000);
+			 printf("%d ADC=%fv ",AD_value,AD_transfer);
+		 }
+		}
+}
 /* USER CODE END 0 */
 
 int main(void)
@@ -94,6 +122,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
    int  		ret = 0;
+	//uint16_t AD_value = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -114,15 +143,20 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_SPI1_Init();
   MX_USART6_UART_Init();
+  MX_ADC1_Init();
+  MX_SPI3_Init();
 
   /* USER CODE BEGIN 2 */
+//	HAL_Delay(5000);//延长5s用于连接蓝牙
+//	BAT_ADC_test();
+	
    HAL_GPIO_WritePin(BT_EN_GPIO_Port,BT_EN_Pin,GPIO_PIN_SET);
 	 HAL_GPIO_WritePin(WIFI_EN_GPIO_Port,WIFI_EN_Pin,GPIO_PIN_SET);
 	 //uint8_t ss[] = "sdf";
 	 
 	 HAL_Delay(5000);//延长5s用于连接蓝牙
+	 //BAT_ADC_test();//这样不打开电池开关，无法继续
 	 platform_init();
 	 rw_appdemo_context_init();
 	 
@@ -142,7 +176,14 @@ int main(void)
 		//printf("ok ");
 //		HAL_UART_Transmit(&huart6,ss,sizeof(*ss),3);
 //		DPRINTF("ddd ");
+//		HAL_ADC_Start(&hadc1);
+//		HAL_ADC_PollForConversion(&hadc1,50);//等待转换完成
+//		if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1),HAL_ADC_STATE_EOC_REG)){
+//		AD_value = HAL_ADC_GetValue(&hadc1);
+//			printf("%d ADC=%fv ",AD_value,AD_value*3.3/0xfff);
+//		}
 		HAL_Delay(1000);
+		
 		if((ret =rw_sysDriverLoop()) != RW_OK){
        DPRINTF("rw_sysDriverLoop error =%d\r\n", ret);
 			HAL_GPIO_WritePin(LED_RED_GPIO_Port,LED_RED_Pin,GPIO_PIN_SET);
