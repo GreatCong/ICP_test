@@ -285,6 +285,7 @@ int main(void)
   MX_TIM2_Init();
   MX_FATFS_Init();
   MX_RTC_Init();
+  MX_SPI1_Init();
 
   /* USER CODE BEGIN 2 */
 //	HAL_Delay(5000);//延长5s用于连接蓝牙
@@ -305,7 +306,8 @@ int main(void)
 	 //rw_network_startSTA();
 	 rw_network_startAP();//start AP
 	 HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-	 
+	 AD7606_Init();
+
 	 //fat_test();//FAT无法工作，可能是硬件有问题
   /* USER CODE END 2 */
 

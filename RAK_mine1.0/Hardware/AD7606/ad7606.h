@@ -3,6 +3,8 @@
 
 #include "stm32f4xx_hal.h"
 
+//#define AD7606_SOFT_SPI //Èí¼þÄ£ÄâSPI
+
 /*
 PC5 -O- OS 0							
 PB0 -O- OS 1
@@ -38,6 +40,10 @@ void AD7606_SetOsRate(AD7606_OS_Rate rate);
 void AD7606_Read4CH(void);
 void AD_CONVEST_PWM_Init(uint8_t f_khz);
 void AD7606_handle(void);
+
+#ifdef AD7606_SOFT_SPI
+void AD7606_GPIO_SPI(void);
+#endif
 
 #endif
 

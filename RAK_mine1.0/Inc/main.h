@@ -101,7 +101,7 @@
 
 /* USER CODE BEGIN Private defines */
 #define WIFI_SPI                             SPI3
-#define AD_SPI                               SPI1//模拟的SPI
+#define AD_SPI                               SPI1//可选择是硬件SPI还是模拟SPI
 /* USER CODE END Private defines */
 
 void _Error_Handler(char *, int);

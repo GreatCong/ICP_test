@@ -369,7 +369,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;        ../Drivers/STM32F4xx_HAL_Driver/Inc;        ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;        ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;        ../Drivers/CMSIS/Include;        ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\include;        ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\mem;        ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\rw_os;        ..\Hardware\RAK439_DriverLibs_V1.0.6\examples_nos;        ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\bsp;        ..\Hardware\AD7606;    ../Middlewares/Third_Party/FatFs/src/drivers;    ../Middlewares/Third_Party/FatFs/src</IncludePath>
+              <IncludePath>../Inc;            ../Drivers/STM32F4xx_HAL_Driver/Inc;            ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;            ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;            ../Drivers/CMSIS/Include;            ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\include;            ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\mem;            ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\rw_os;            ..\Hardware\RAK439_DriverLibs_V1.0.6\examples_nos;            ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\bsp;            ..\Hardware\AD7606;        ../Middlewares/Third_Party/FatFs/src/drivers;        ../Middlewares/Third_Party/FatFs/src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
