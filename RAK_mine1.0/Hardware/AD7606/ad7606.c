@@ -83,21 +83,26 @@ void AD7606_Read4CH(void)
 }
 #else
 void AD7606_Read4CH(void){
-  uint8_t 						dummy;
-  uint8_t 						recv;
-	uint8_t 						i;
+//  uint8_t 						dummy;
+//  uint8_t 						recv;
+//	uint8_t 						i;
 	HAL_StatusTypeDef status = HAL_OK;
 	
-	for(i=0;i<8;i++){
-	  SPI_CS(0);//chip select
-		while(HAL_SPI_GetState(&hspi1)==HAL_SPI_STATE_BUSY_TX){};//等待发送缓冲区空
-		
-	  status = HAL_SPI_TransmitReceive(&hspi1,&dummy,&recv,1,5000);
-	  assert_param(status == HAL_OK);		
-		
-		SPI_CS(1);//chip deselect
-		AD7606_BUF.bytebuf[i] = recv;
-	}
+	SPI_CS(0);//chip select
+//	for(i=0;i<8;i++){
+//	  SPI_CS(0);//chip select
+//		while(HAL_SPI_GetState(&hspi1)==HAL_SPI_STATE_BUSY_TX){};//等待发送缓冲区空
+//		
+//	  status = HAL_SPI_TransmitReceive(&hspi1,&dummy,&recv,1,5000);
+//	  assert_param(status == HAL_OK);		
+//		
+//		SPI_CS(1);//chip deselect
+//		AD7606_BUF.bytebuf[i] = recv;
+//	}
+	
+	status = HAL_SPI_Receive_DMA(&hspi1,AD7606_BUF.bytebuf,8);//HAL_SPI_Receive自带向从机发送空字节
+  assert_param(status == HAL_OK);	
+	SPI_CS(1);//chip deselect
 	
 }
 #endif
@@ -199,7 +204,7 @@ void AD7606_handle(void){
 	
 //	for(i=0;i<4;i++) 
 //	{
-//		printf("AD7606 = %d,i=%d\r\n",AD7606_BUF.shortbuf[0+i],i);//会造成阻塞，Wifi无法初始化
+//		printf("AD7606 = 0x%x,i=%d\r\n",AD7606_BUF.shortbuf[0+i],i);//会造成阻塞，Wifi无法初始化
 //		
 //	}
 	//i = AD7606_BUF.bytebuf[0];

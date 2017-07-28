@@ -855,10 +855,10 @@ ARM Macro Assembler    Page 14
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=rak_mine1.0\startup_stm32f405xx.d -orak_mine1.0\startup_stm32f4
 05xx.o -IC:\Users\congcong\Desktop\test\RAK_mine1.0\MDK-ARM\RTE -IF:\Keil_v5\AR
-M\PACK\ARM\CMSIS\4.3.0\CMSIS\Include -IF:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2
-.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1"
- --predefine="__UVISION_VERSION SETA 515" --predefine="_RTE_ SETA 1" --predefin
-e="STM32F405xx SETA 1" --list=startup_stm32f405xx.lst startup_stm32f405xx.s
+M\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IF:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2
+.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1" 
+--predefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine
+="STM32F405xx SETA 1" --list=startup_stm32f405xx.lst startup_stm32f405xx.s
 
 
 

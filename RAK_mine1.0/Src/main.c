@@ -49,6 +49,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "adc.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "rtc.h"
 #include "sdio.h"
@@ -278,6 +279,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART6_UART_Init();
   MX_ADC1_Init();
   MX_SPI3_Init();

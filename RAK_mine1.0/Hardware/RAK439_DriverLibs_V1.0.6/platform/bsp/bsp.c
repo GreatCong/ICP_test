@@ -58,7 +58,10 @@ void _sys_exit(int x)
  //重定义fputc函数 
 int fputc(int ch, FILE *f)
 { 	
-  HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,2);
+  //HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,2);//在中断中调用会造成阻塞，使用寄存器不会
+	
+	while((USART6->SR&0X40)==0);//循环发送,直到发送完毕   
+	USART6->DR = (uint8_t) ch;      
 	return ch;
 }
 #endif
