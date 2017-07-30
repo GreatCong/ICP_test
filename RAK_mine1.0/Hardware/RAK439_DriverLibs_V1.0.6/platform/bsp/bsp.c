@@ -1,70 +1,74 @@
 #include "bsp.h"
-//#include "stdio.h"
-//#if   defined ( __CC_ARM )
-//#ifdef __GNUC__
-///* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
-//set to 'Yes') calls __io_putchar() */
-//#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-//#else
-//#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-//#endif /* __GNUC__ */
-///**
-//* @brief  Retargets the C library printf function to the USART.
-//* @param  None
-//* @retval None
-//*/
-////   PUTCHAR_PROTOTYPE
-////   {
-////     /* Place your implementation of fputc here */
-////     /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-////     USART_SendData(PRINT_USART, (uint16_t) ch);
-////           
-////     /* Loop until the end of transmission */
-////     while (USART_GetFlagStatus(PRINT_USART, USART_FLAG_TC) == RESET)
-//// 		
-////     {};
+#include "stdio.h"
+#if   defined ( __CC_ARM )
+#ifdef __GNUC__
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+/**
+* @brief  Retargets the C library printf function to the USART.
+* @param  None
+* @retval None
+*/
+//   PUTCHAR_PROTOTYPE
+//   {
+//     /* Place your implementation of fputc here */
+//     /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+//     USART_SendData(PRINT_USART, (uint16_t) ch);
+//           
+//     /* Loop until the end of transmission */
+//     while (USART_GetFlagStatus(PRINT_USART, USART_FLAG_TC) == RESET)
+// 		
+//     {};
 
-////     return ch;
-////   }
+//     return ch;
+//   }
 
-//PUTCHAR_PROTOTYPE
-//{
-//    /* Place your implementation of fputc here */
-//    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-//    /* Place your implementation of fputc here */
-//    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-//    HAL_UART_Transmit(&huart6, (uint8_t *)&ch, 1, 0xFFFF); 
-
-//    return ch;
-//}
-
-//#endif
-
-//加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
-#if 1
-#pragma import(__use_no_semihosting)             
-//标准库需要的支持函数                 
-struct __FILE 
+PUTCHAR_PROTOTYPE
 {
-	int handle; 
-}; 
-
-FILE __stdout;       
-//定义_sys_exit()以避免使用半主机模式    
-void _sys_exit(int x) 
-{ 
-	x = x; 
-} 
- //重定义fputc函数 
-int fputc(int ch, FILE *f)
-{ 	
+    /* Place your implementation of fputc here */
+    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+    /* Place your implementation of fputc here */
+    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
   //HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,2);//在中断中调用会造成阻塞，使用寄存器不会
 	
 	while((USART6->SR&0X40)==0);//循环发送,直到发送完毕   
 	USART6->DR = (uint8_t) ch;      
 	return ch;
+
 }
+
 #endif
+
+////加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
+//#if 1
+////#pragma import(__use_no_semihosting)             
+////标准库需要的支持函数                 
+//struct __FILE 
+//{
+//	int handle; 
+//}; 
+
+//FILE __stdout;       
+////定义_sys_exit()以避免使用半主机模式    
+//void _sys_exit(int x) 
+//{ 
+//	x = x; 
+//} 
+// //重定义fputc函数 
+//int fputc(int ch, FILE *f)
+//{ 	
+//  //HAL_UART_Transmit(&huart6,(uint8_t*)&ch,1,2);//在中断中调用会造成阻塞，使用寄存器不会
+//	
+//	while((USART6->SR&0X40)==0);//循环发送,直到发送完毕   
+//	USART6->DR = (uint8_t) ch;      
+//	return ch;
+//}
+//
+//#endif
 
 
 void SPIx_Error(void)

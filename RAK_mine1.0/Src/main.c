@@ -61,6 +61,11 @@
 /* USER CODE BEGIN Includes */
 #include "rw_app.h"
 #include "AD7606.h"
+
+//#include "lua.h"
+//#include "lauxlib.h"
+//#include "lualib.h"
+#include "lua_test.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -309,6 +314,8 @@ int main(void)
 	 rw_network_startAP();//start AP
 	 HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 	 AD7606_Init();
+	 
+	 lua_main_test();//测试lua脚本
 
 	 //fat_test();//FAT无法工作，可能是硬件有问题
   /* USER CODE END 2 */
