@@ -34,7 +34,7 @@ static int luaB_print (lua_State *L) {
     s = lua_tolstring(L, -1, &l);  /* get result */
     if (s == NULL)
       return luaL_error(L, "'tostring' must return a string to 'print'");
-    if (i>1) lua_writestring("\t", 1);
+    //if (i>1) lua_writestring("\t", 1);//打印参数的时候会出现'\t'
     lua_writestring(s, l);
     lua_pop(L, 1);  /* pop result */
   }
