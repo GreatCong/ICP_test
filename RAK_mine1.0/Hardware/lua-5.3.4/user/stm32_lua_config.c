@@ -12,7 +12,7 @@
 					 liolib.c   --> io文件调用的库
 					 lauxlib.c  ---> 1008行 l_alloc函数 修改myfree和myrealloc内存管理 否则修改启动文件heap和stack足够大
 					 Lua print的实现在lbaselib.c的luaB_print函数 --> 修改了luaB_print函数，使其打印参数的时候不会多一个'\t'
-					 lauxlib.h  ---> 包含了串口重定向的默认值,可以在luaconf.h中添加修改
+					 lauxlib.h  ---> 包含了串口重定向的默认值,可以在luaconf.h中添加修改 lua查找文件的路径也在luaconf.h中修改
 ******************************************************************************
 */
 

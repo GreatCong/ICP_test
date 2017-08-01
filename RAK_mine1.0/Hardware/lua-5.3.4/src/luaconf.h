@@ -12,7 +12,7 @@
 #include <stddef.h>
 
 //默认的是将错误输出到文件，这里重定向为串口输出
-#define lua_writestringerror(s,p) printf("LuaError! ");printf(s,p)
+#define lua_writestringerror(s,p) printf("Error!\r\n");printf(s,p)
 //        (fprintf(stderr, (s), (p)), fflush(stderr))
         
 

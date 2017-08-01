@@ -465,7 +465,7 @@ void _Error_Handler(char * file, int line)
   while(1) 
   {
 		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
-		  HAL_Delay(8000);
+		  HAL_Delay(10000);
   }
   /* USER CODE END Error_Handler_Debug */ 
 }
