@@ -220,8 +220,8 @@
 //		"./?.lua;" "./?/init.lua"
 //#define LUA_CPATH_DEFAULT \
 //		LUA_CDIR"?.so;" LUA_CDIR"loadall.so;" "./?.so"
-#define LUA_PATH_DEFAULT "/?.lua;"	"./?.lua;"
-#define LUA_CPATH_DEFAULT "/?.so"	"./?.so;"
+#define LUA_PATH_DEFAULT "/?.lua;"
+#define LUA_CPATH_DEFAULT "/?.so"
 #endif			/* } */
 
 

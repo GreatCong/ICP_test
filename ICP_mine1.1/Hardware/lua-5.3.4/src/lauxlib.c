@@ -26,7 +26,7 @@
 
 #include "lauxlib.h"
 
-#include "malloc.h"//add mine
+#include "my_malloc.h"//add mine
 
 /*
 ** {======================================================
@@ -640,7 +640,7 @@ typedef struct LoadF {
 } LoadF;
 
 
-static const char *getF (lua_State *L, void *ud, size_t *size) {
+static const char *getF (lua_State *L, void *ud, size_t *size) {		
   LoadF *lf = (LoadF *)ud;
   (void)L;  /* not used */
   if (lf->n > 0) {  /* are there pre-read characters to be read? */
@@ -653,6 +653,9 @@ static const char *getF (lua_State *L, void *ud, size_t *size) {
        The next check avoids this problem. */
     if (feof(lf->f)) return NULL;
     *size = fread(lf->buff, 1, sizeof(lf->buff), lf->f);  /* read block */
+//		xprintf("getF=%s\r\n",lf->buff);
+//		xprintf("*size=%d",*size);
+		
   }
   return lf->buff;
 }

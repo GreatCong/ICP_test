@@ -281,10 +281,10 @@ static void _power_up_down(uint8_t status)
 //      }else {
 //        WIFI_SPI->DR = write[i];
 //      }
-//      //	  printf("send=%x      ",write[i]); 
+//      //	  xprintf("send=%x      ",write[i]); 
 //      while((WIFI_SPI->SR&SPI_FLAG_RXNE)==RESET);
 //      recv = WIFI_SPI->DR;
-//			//	  printf("recv dummy=%x\r\n",dummy);
+//			//	  xprintf("recv dummy=%x\r\n",dummy);
 //    }
 //  } 
 //  else {
@@ -295,11 +295,11 @@ static void _power_up_down(uint8_t status)
 //   //	  printf("send dummy=%x  ",dummy); 
 //      }else {
 //        WIFI_SPI->DR = write[i];
-//   //	   printf("send=%x  ",write[i]);
+//   //	   xprintf("send=%x  ",write[i]);
 //      }
 //      while((WIFI_SPI->SR&SPI_FLAG_RXNE)==RESET);
 //      read[i] = WIFI_SPI->DR;
-//    //	  printf("recv=%x\r\n",read[i]);
+//    //	  xprintf("recv=%x\r\n",read[i]);
 //    }
 //  }
 //#endif
@@ -321,9 +321,9 @@ static void _spi_io_buffer(uint8_t* write, uint8_t* read, uint16_t len)
 //	{
 //			for (int i=0;i<len;++i)
 //			{
-//				printf("send = %x ",*(write+i)); 
+//				xprintf("send = %x ",*(write+i)); 
 //			}
-//			printf("\r\n");
+//			xprintf("\r\n");
 //	}
 
 

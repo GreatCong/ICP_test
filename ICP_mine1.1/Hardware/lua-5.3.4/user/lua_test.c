@@ -11,6 +11,7 @@
 #include "main.h"
 
 #include "fatfs.h"
+#include "xprintf.h"
 
 /*以下是Lua.c中的内容*/
 #if !defined(LUA_PROMPT)
@@ -629,7 +630,7 @@ void lua_main_test(void)
 	lua_close(L);
 	
 	if(ret != LUA_OK){
-		//printf("\r\nSomething error in luaL_dostring!\r\n");
+		//xprintf("\r\nSomething error in luaL_dostring!\r\n");
 	  Error_Handler();
 	}
 	
@@ -644,6 +645,10 @@ void lua_main_test(void)
 //  return (result && status == LUA_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
+// @ function: 
+// @ description: lua do_file
+// @ input:
+// @ note:
 int do_file_script(char *filename)
 {
 	
@@ -655,13 +660,13 @@ int do_file_script(char *filename)
 	lua_State *L;
 	int ret = LUA_OK;
 	
-//	printf("\r\n ****** FatFs Example ******\r\n\r\n");
+//	xprintf("\r\n ****** FatFs Example ******\r\n\r\n");
  
     /*##-1- Register the file system object to the FatFs module ##############*/
     retSD = f_mount(&fs, "", 0);
     if(retSD)
     {
-        printf(" mount error : %d \r\n",retSD);
+        xprintf(" mount error : %d \r\n",retSD);
         Error_Handler();
     }
 //    else
@@ -669,13 +674,13 @@ int do_file_script(char *filename)
 		
 		retSD = f_open(&fil, filename, FA_READ);
     if(retSD)
-       printf(" open file error : %d\r\n",retSD);
+       xprintf(" open file error : %d\r\n",retSD);
 //    else
 //        printf(" open file sucess!!! \r\n");
      
     retSD = f_read(&fil, rtext, sizeof(rtext), (UINT*)&bytesread);
     if(retSD)
-        printf(" read error!!! %d\r\n",retSD);
+        xprintf(" read error!!! %d\r\n",retSD);
 //    else
 //    {
 //        printf(" read sucess!!! \r\n");
@@ -684,9 +689,9 @@ int do_file_script(char *filename)
     
     retSD = f_close(&fil);
     if(retSD)  
-        printf(" close error!!! %d\r\n",retSD);
+        xprintf(" close error!!! %d\r\n",retSD);
 //    else
-//        printf(" close sucess!!! \r\n");
+//        xprintf(" close sucess!!! \r\n");
 		
 		L = luaL_newstate(); /* 建立Lua运行环境 */
 	if (L == NULL) {
@@ -701,7 +706,7 @@ int do_file_script(char *filename)
 	print_version();
 	
 	rtext[bytesread]='\0';
-//	printf(" read Data : %s\r\n",rtext);
+//	xprintf(" read Data : %s\r\n",rtext);
 	
 	ret = luaL_dostring(L, rtext); /* 运行Lua脚本 */
 	
@@ -710,9 +715,68 @@ int do_file_script(char *filename)
 	lua_close(L);
 	
 	if(ret != LUA_OK){
-		//printf("\r\nSomething error in luaL_dostring!\r\n");
+		//xprintf("\r\nSomething error in luaL_dostring!\r\n");
 	  Error_Handler();
 	}
 		
 		return 1;
 }
+
+// @ function: 
+// @ description:lua do_file using fopen
+// @ input:
+// @ note:
+int do_file_script1(char *filename)
+{
+	FILE *fp;
+	uint32_t size;
+	char buff[100];
+	lua_State *L;
+	int ret;
+	
+	if( ( fp = fopen(filename, "r" ) ) == NULL )
+	{
+		return -1;
+	}
+	fseek( fp, 0L, SEEK_END );
+  size=ftell(fp);
+	xprintf("size=%d\r\n",size);
+	fseek(fp,0L,SEEK_SET);
+	if(size<=0)
+	{	
+		fclose( fp ); 
+		return -1;
+	}
+  //xprintf("sizeof=%d",sizeof(buff));//sizeof(buff))is 100
+	fread(&buff,size,1,fp);
+  fclose(fp);	
+	if(buff==NULL)
+	{		
+		xprintf("\r\n read error\r\n");
+		return -1;
+	}
+	else{
+		buff[size]='\0';
+		xprintf("******** script is :************\r\n%s\r\n",buff);
+	}
+	xprintf("************************* \r\n");
+	
+	if( ( fp = fopen("S.txt", "a+" ) ) == NULL )
+	{
+		return -1;
+	}
+	
+	fwrite(&buff,size,1,fp);
+  fclose(fp);	
+	
+	L= luaL_newstate();
+	luaL_openlibs(L);
+	ret=luaL_dostring(L,buff);
+	xprintf("\r\n dofile start\r\n");
+	dofile(L,filename);
+	report(L, ret);//打印错误报告,返回值也是ret
+	lua_close(L);
+
+	return 0;
+}
+

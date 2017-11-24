@@ -12,15 +12,8 @@
 #include <stddef.h>
 
 //默认的是将错误输出到文件，这里重定向为串口输出
-//#define lua_writestringerror(s,p) xprintf("Error!\r\n");xprintf(s,p)
-////        (fprintf(stderr, (s), (p)), fflush(stderr))
-//#define lua_writestring(s,l)   xprintf(s,l)
-////fwrite((s), sizeof(char), (l), stdout)
-
-///* print a newline and flush the output */
-//#define lua_writeline()   (lua_writestring("\n", 1))    
-////(lua_writestring("\n", 1), fflush(stdout))
-
+#define lua_writestringerror(s,p) printf("Error!\r\n");printf(s,p)
+//        (fprintf(stderr, (s), (p)), fflush(stderr))
         
 
 /*
@@ -214,14 +207,12 @@
 #define LUA_ROOT	"/usr/local/"
 #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
 #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
-//#define LUA_PATH_DEFAULT  \
-//		LUA_LDIR"?.lua;"  LUA_LDIR"?/init.lua;" \
-//		LUA_CDIR"?.lua;"  LUA_CDIR"?/init.lua;" \
-//		"./?.lua;" "./?/init.lua"
-//#define LUA_CPATH_DEFAULT \
-//		LUA_CDIR"?.so;" LUA_CDIR"loadall.so;" "./?.so"
-#define LUA_PATH_DEFAULT "/?.lua;"	"./?.lua;"
-#define LUA_CPATH_DEFAULT "/?.so"	"./?.so;"
+#define LUA_PATH_DEFAULT  \
+		LUA_LDIR"?.lua;"  LUA_LDIR"?/init.lua;" \
+		LUA_CDIR"?.lua;"  LUA_CDIR"?/init.lua;" \
+		"./?.lua;" "./?/init.lua"
+#define LUA_CPATH_DEFAULT \
+		LUA_CDIR"?.so;" LUA_CDIR"loadall.so;" "./?.so"
 #endif			/* } */
 
 

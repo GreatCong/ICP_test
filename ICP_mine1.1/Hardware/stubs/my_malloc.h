@@ -1,5 +1,5 @@
-#ifndef __MALLOC_H
-#define __MALLOC_H
+#ifndef __MY_MALLOC_H
+#define __MY_MALLOC_H
 #include "stm32f4xx_hal.h"
  
 #ifndef NULL

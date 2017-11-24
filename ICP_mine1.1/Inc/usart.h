@@ -58,8 +58,9 @@
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
+//#include <stdio.h>
 #include <string.h>
+#include "xprintf.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart6;
@@ -91,7 +92,7 @@ static const char* clean_filename(const char* path)
 
 #ifdef DEBUG
 //#define DPRINTF(fmt, args...) printf(fmt, ##args)
-#define DPRINTF(fmt, args...) do { printf("%d  ""%s" ":%u  ", HAL_GetTick(), clean_filename(__FILE__), __LINE__); printf(fmt, ##args); } while(0)
+#define DPRINTF(fmt, args...) do { xprintf("%d  ""%s" ":%u  ", HAL_GetTick(), clean_filename(__FILE__), __LINE__); xprintf(fmt, ##args); } while(0)
 #else
 #define DPRINTF(fmt, args...)
 #endif

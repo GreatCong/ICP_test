@@ -15,6 +15,8 @@
 
 #include "luaconf.h"
 
+#include "xprintf.h"//add mine
+
 
 #define LUA_VERSION_MAJOR	"5"
 #define LUA_VERSION_MINOR	"3"

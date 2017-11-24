@@ -1,4 +1,4 @@
-#include "malloc.h"	   
+#include "my_malloc.h"	   
 
 //内存池(32字节对齐)
 __align(32) uint8_t mem1base[MEM1_MAX_SIZE];													//内部SRAM内存池

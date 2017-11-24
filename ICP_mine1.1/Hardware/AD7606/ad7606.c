@@ -204,7 +204,7 @@ void AD7606_handle(void){
 	
 //	for(i=0;i<4;i++) 
 //	{
-//		printf("AD7606 = 0x%x,i=%d\r\n",AD7606_BUF.shortbuf[0+i],i);//会造成阻塞，Wifi无法初始化
+//		xprintf("AD7606 = 0x%x,i=%d\r\n",AD7606_BUF.shortbuf[0+i],i);//会造成阻塞，Wifi无法初始化
 //		
 //	}
 	//i = AD7606_BUF.bytebuf[0];

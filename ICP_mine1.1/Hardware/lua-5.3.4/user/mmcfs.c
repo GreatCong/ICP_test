@@ -1,7 +1,13 @@
-/*
- * File: mmcfs.c 
- * Change Logs: 暂时无法对fopen等IO重定向，以下函数并没有调用
- */
+/**
+ *************************************************************************************
+ * @file 
+ * @author liucongjun
+ * @version
+ * @date 2017.11.23
+ * @brief test "fopen" "fread" "fwrite"
+ *************************************************************************************
+*/
+
 #include <string.h>
 #include <stdio.h>
 #include "ff.h"
@@ -30,6 +36,7 @@ int mmc_open(const char * filename, int mode)
  
   int fd;
   int mmc_mode;
+	
   if (mmcfs_num_fd == MMCFS_MAX_FDS)
   {
     return -1;
@@ -40,17 +47,39 @@ int mmc_open(const char * filename, int mode)
   strcat(mmc_pathbuf, filename);
 	switch(mode)
 	{
-		case 0:mmc_mode=FA_OPEN_EXISTING|FA_READ;break;		//r
-		case 2:mmc_mode=FA_OPEN_EXISTING|FA_READ|FA_WRITE;break;	    //r+
-		case 3:mmc_mode=FA_OPEN_ALWAYS|FA_READ;break;	    //rb+
-		case 4:mmc_mode=FA_CREATE_ALWAYS|FA_WRITE;	break;		//w
-		case 5:mmc_mode=FA_OPEN_ALWAYS|FA_WRITE;break;	    //wb
-		case 6:mmc_mode=FA_CREATE_ALWAYS|FA_READ|FA_WRITE;break;	    //w+
-		case 7:mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;break;		//wb+
-		case 8:mmc_mode=FA_OPEN_ALWAYS|FA_WRITE;break;		//a
-		case 0xa:mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;break;		 //a+
-		case 0xb:mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;break;		 //ab+
-		case 18:mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;break;		 //at+
+		case OPEN_R://r
+			mmc_mode=FA_OPEN_EXISTING|FA_READ;
+		  break;		
+		case OPEN_R|OPEN_PLUS://r+
+			mmc_mode=FA_OPEN_EXISTING|FA_READ|FA_WRITE;
+		  break;	    
+		case OPEN_R|OPEN_B|OPEN_PLUS://rb+
+			mmc_mode=FA_OPEN_ALWAYS|FA_READ;
+		  break;	    
+		case OPEN_W://w
+			mmc_mode=FA_CREATE_ALWAYS|FA_WRITE;	
+		  break;		
+		case OPEN_W|OPEN_B://wb
+			mmc_mode=FA_OPEN_ALWAYS|FA_WRITE;
+		  break;	    
+		case OPEN_W|OPEN_PLUS://w+
+			mmc_mode=FA_CREATE_ALWAYS|FA_READ|FA_WRITE;
+		  break;	    
+		case OPEN_W|OPEN_B|OPEN_PLUS://wb+
+			mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;
+		  break;		
+		case OPEN_A://a
+			mmc_mode=FA_OPEN_ALWAYS|FA_WRITE;
+		  break;		
+		case OPEN_A|OPEN_PLUS://a+
+			mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;
+		  break;		 
+		case OPEN_A|OPEN_B|OPEN_PLUS://ab+
+			mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;
+		  break;		 
+		case 18: //at+
+			mmc_mode=FA_OPEN_ALWAYS|FA_READ|FA_WRITE;
+		  break;		 
 	}
 
  
@@ -59,9 +88,19 @@ int mmc_open(const char * filename, int mode)
   {
     return -1;
   }
-  if (mode & OPEN_A)
-    mmc_fileObject.fptr = mmc_fileObject.fsize;
+	
+  if (mode & OPEN_A){
+    //mmc_fileObject.fptr = mmc_fileObject.fsize;
+		f_lseek(&mmc_fileObject,mmc_fileObject.fsize);
+	}
+	
   fd = mmcfs_find_empty_fd();
+	if (fd<0){
+	   printf(" find_empty_fd error\r\n");
+	}
+//	else{
+//	  printf(" fd=%d\r\n",fd);
+//	}
   memcpy(mmcfs_fd_table + fd, &mmc_fileObject, sizeof(FIL));
   mmcfs_num_fd ++;
   return fd; 	 
@@ -79,22 +118,24 @@ int mmc_close(int handle)
 		}
   return 0;
 }
-size_t mmc_write(int handle, const unsigned char * buffer, size_t size)
+size_t mmc_write(int handle, const void * buffer, size_t size)
 {
   UINT bytes_written;
-  if (f_write(mmcfs_fd_table + handle,  buffer, size, &bytes_written) != FR_OK)
+  if (f_write(mmcfs_fd_table + handle,  buffer, (UINT)size, &bytes_written) != FR_OK)
   {
     return 0;
   }
   return (size_t) bytes_written;
 }
-size_t mmc_read(int handle, unsigned char * buffer, size_t size)
+size_t mmc_read(int handle, void * buffer, size_t size)
 {
   UINT bytes_read;
-  if (f_read(mmcfs_fd_table + handle, buffer, size, &bytes_read) != FR_OK)
+	
+  if (f_read(mmcfs_fd_table + handle, buffer, (UINT)size, &bytes_read) != FR_OK)
   {
     return 0;
-  }
+  } 
+//	xprintf("mmc_read=%s\r\n",buffer);
   return (size_t) bytes_read;
 }
 long mmc_lseek(int handle, long offset, int whence)
@@ -139,4 +180,11 @@ int mmcfs_init(void)
     return -1;
   else 
     return 0;
+}
+
+int mmcfs_feof(int handle){
+  if (f_eof(mmcfs_fd_table + handle))//end
+		return 1;
+	else
+		return 0;
 }

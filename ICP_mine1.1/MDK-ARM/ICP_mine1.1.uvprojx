@@ -226,7 +226,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -369,7 +369,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;  ../Middlewares/Third_Party/FatFs/src/drivers;  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;  ../Middlewares/Third_Party/FatFs/src;  ../Drivers/CMSIS/Include;  ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\include;  ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\mem;  ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\rw_os;  ..\Hardware\RAK439_DriverLibs_V1.0.6\examples_nos;  ..\Hardware\RAK439_DriverLibs_V1.0.6\platform\bsp;  ..\Hardware\AD7606;  ..\Hardware\lua-5.3.4\src;  ..\Hardware\lua-5.3.4\user;  ..\Hardware\my_malloc</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src/drivers;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Include;..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\include;..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\mem;..\Hardware\RAK439_DriverLibs_V1.0.6\platform\common\rw_os;..\Hardware\RAK439_DriverLibs_V1.0.6\examples_nos;..\Hardware\RAK439_DriverLibs_V1.0.6\platform\bsp;..\Hardware\AD7606;..\Hardware\lua-5.3.4\src;..\Hardware\lua-5.3.4\user;..\Hardware\stubs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -945,12 +945,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>My_malloc</GroupName>
+          <GroupName>Stubs</GroupName>
           <Files>
             <File>
-              <FileName>malloc.c</FileName>
+              <FileName>my_malloc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Hardware\my_malloc\malloc.c</FilePath>
+              <FilePath>..\Hardware\stubs\my_malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>xprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\stubs\xprintf.c</FilePath>
+            </File>
+            <File>
+              <FileName>xprint_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\stubs\xprint_init.c</FilePath>
             </File>
           </Files>
         </Group>

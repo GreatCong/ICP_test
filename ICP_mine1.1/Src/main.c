@@ -66,6 +66,8 @@
 //#include "lauxlib.h"
 //#include "lualib.h"
 #include "lua_test.h"
+#include "mmcfs.h"
+#include "xprintf_init.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -102,7 +104,7 @@ int platform_init(void)
   if(ret != RW_OK)
   {
     DPRINTF("RAK module platform init...failed code=%d\r\n", ret);
-    while(1){printf("ret=%d ",ret);HAL_Delay(1000);/*HAL_GPIO_WritePin(BT_EN_GPIO_Port,BT_EN_Pin,GPIO_PIN_SET);*/}; 
+    while(1){xprintf("ret=%d ",ret);HAL_Delay(1000);/*HAL_GPIO_WritePin(BT_EN_GPIO_Port,BT_EN_Pin,GPIO_PIN_SET);*/}; 
   }
   rw_getLibVersion(libVersion); 
   DPRINTF("rak wifi LibVersion:%s\r\n", libVersion);
@@ -120,13 +122,18 @@ int platform_init(void)
 void BAT_ADC_test(void){
 	  uint16_t AD_value = 0;
 	  float AD_transfer = 0;
+	  int value_temp[2];
 	
 		HAL_ADC_Start(&hadc1);
 		HAL_ADC_PollForConversion(&hadc1,50);//等待转换完成
 		if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1),HAL_ADC_STATE_EOC_REG)){
 		AD_value = HAL_ADC_GetValue(&hadc1);
 	  AD_transfer = AD_value*2*3.3/0xfff;//由于分压，需要乘上2
-			printf("%d ADC=%fv ",AD_value,AD_transfer);
+			//xprintf("%d ADC=%fv \r\n",AD_value,AD_transfer);//xprintf not support %f
+			value_temp[0] = (int)AD_transfer;
+			value_temp[1] = (int)((AD_transfer-value_temp[0])*100);
+			xprintf("%d ADC=%d.%dv \r\n",AD_value,value_temp[0],value_temp[1]);
+			
 		}
 		if(AD_transfer < 3.2f){
 			HAL_GPIO_WritePin(BT_EN_GPIO_Port,BT_EN_Pin,GPIO_PIN_RESET);
@@ -134,7 +141,8 @@ void BAT_ADC_test(void){
 		 while(1){
 		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
 		  HAL_Delay(5000);
-			 printf("%d ADC=%fv ",AD_value,AD_transfer);
+			 //xprintf("%d ADC=%fv ",AD_value,AD_transfer);
+			 xprintf("%d ADC=%d.%dv \r\n",AD_value,value_temp[0],value_temp[1]);
 		 }
 		}
 }
@@ -150,110 +158,125 @@ void fat_test(void){
 	char filename[] = "STM32cube.txt";
 //	char filename[] = "S.txt";
 	
-    printf("\r\n ****** FatFs Example ******\r\n\r\n");
+    xprintf("\r\n ****** FatFs Example ******\r\n\r\n");
  
     /*##-1- Register the file system object to the FatFs module ##############*/
     retSD = f_mount(&fs, "", 0);
     if(retSD)
     {
-        printf(" mount error : %d \r\n",retSD);
+        xprintf(" mount error : %d \r\n",retSD);
         Error_Handler();
     }
     else
-        printf(" mount sucess!!! \r\n");
+        xprintf(" mount sucess!!! \r\n");
      
     /*##-2- Create and Open new text file objects with write access ######*/
     retSD = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
     if(retSD)
-        //printf(" open file error : %d\r\n",retSD);
+        //xprintf(" open file error : %d\r\n",retSD);
 		fat_error_test(retSD);
     else
-        printf(" open file sucess!!! \r\n");
+        xprintf(" open file sucess!!! \r\n");
      
     /*##-3- Write data to the text files ###############################*/
     retSD = f_write(&fil, wtext, sizeof(wtext), (void *)&byteswritten);
     if(retSD)
-        //printf(" write file error : %d\r\n",retSD);
+        //xprintf(" write file error : %d\r\n",retSD);
 		fat_error_test(retSD);
     else
     {
-        printf(" write file sucess!!! \r\n");
-        printf(" write Data : %s\r\n",wtext);
+        xprintf(" write file sucess!!! \r\n");
+        xprintf(" write Data : %s\r\n",wtext);
     }
      
     /*##-4- Close the open text files ################################*/
     retSD = f_close(&fil);
     if(retSD)
-        //printf(" close error : %d\r\n",retSD);
+        //xprintf(" close error : %d\r\n",retSD);
 		fat_error_test(retSD);
     else
-        printf(" close sucess!!! \r\n");
+        xprintf(" close sucess!!! \r\n");
      
     /*##-5- Open the text files object with read access ##############*/
     retSD = f_open(&fil, filename, FA_READ);
     if(retSD)
-        //printf(" open file error : %d\r\n",retSD);
+        //xprintf(" open file error : %d\r\n",retSD);
 		fat_error_test(retSD);
     else
-        printf(" open file sucess!!! \r\n");
+        xprintf(" open file sucess!!! \r\n");
      
     /*##-6- Read data from the text files ##########################*/
     retSD = f_read(&fil, rtext, sizeof(rtext), (UINT*)&bytesread);
     if(retSD)
-        //printf(" read error!!! %d\r\n",retSD);
+        //xprintf(" read error!!! %d\r\n",retSD);
 		fat_error_test(retSD);
     else
     {
-        printf(" read sucess!!! \r\n");
-        printf(" read Data : %s\r\n",rtext);
+        xprintf(" read sucess!!! \r\n");
+        xprintf(" read Data : %s\r\n",rtext);
     }
      
     /*##-7- Close the open text files ############################*/
     retSD = f_close(&fil);
     if(retSD)  
-        //printf(" close error!!! %d\r\n",retSD);
+        //xprintf(" close error!!! %d\r\n",retSD);
 		fat_error_test(retSD);
     else
-        printf(" close sucess!!! \r\n");
+        xprintf(" close sucess!!! \r\n");
      
     /*##-8- Compare read data with the expected data ############*/
     if(bytesread == byteswritten)
     { 
-        printf(" FatFs is working well!!!\r\n");
+        xprintf(" FatFs is working well!!!\r\n");
     }
 }
 
 void fat_error_test(uint8_t ret){
   switch(ret){
 		case FR_OK :
-			printf("磁盘正常\r\n");
+			xprintf("磁盘正常\r\n");
 			break;
 		case FR_INVALID_DRIVE:
-			printf("驱动器无效\r\n");
+			xprintf("驱动器无效\r\n");
 			break;
 		case FR_NOT_READY:
-			printf("磁盘驱动器无法工作\r\n");
+			xprintf("磁盘驱动器无法工作\r\n");
 			break;
 		case FR_DISK_ERR:
-			printf("底层磁盘IO错误\r\n");
+			xprintf("底层磁盘IO错误\r\n");
 			break;
 		case FR_NO_PATH:
-			printf("找不到路径\r\n");
+			xprintf("找不到路径\r\n");
 			break;
 		case FR_INVALID_NAME:
-			printf("文件名无效\r\n");
+			xprintf("文件名无效\r\n");
 			break;
 		case FR_NO_FILE:
-			printf("找不到该文件\r\n");
+			xprintf("找不到该文件\r\n");
 			break;
 		case FR_EXIST:
-			printf("文件已存在\r\n");
+			xprintf("文件已存在\r\n");
 			break;
 		default:
-			printf("其他错误%d\r\n",ret);
+			xprintf("其他错误%d\r\n",ret);
 			break;
 	}
 		
+}
+
+
+void SD_test(void){
+  FILE *fp;
+	
+	mmcfs_init();
+	fp = fopen( "/autorun.lua", "r" );
+	if( fp == NULL )
+	{
+		xprintf("open error");
+	}
+	else{
+	  xprintf("open OK");
+	}
 }
 
 /* USER CODE END 0 */
@@ -305,6 +328,7 @@ int main(void)
 	 AD_CONVEST_PWM_Init(10);//10kHz
 	 
 	 //uint8_t ss[] = "sdf";
+	 x_printf_init();
 	 
 	 HAL_Delay(5000);//延长5s用于连接蓝牙
 	 BAT_ADC_test();//这样不打开电池开关，无法继续
@@ -316,10 +340,15 @@ int main(void)
 	 HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 	 AD7606_Init();
 	 
+	 //xprintf("s=%d",2);
+	 
 	 //lua_main_test();//测试lua脚本
 
 	 //fat_test();//测试fat
-	 do_file_script("autorun.lua");//测试lua SD卡读入
+	 //do_file_script("autorun.lua");//测试lua SD卡读入
+	 //SD_test();
+	 	mmcfs_init();
+	 do_file_script1("autorun.lua");//测试lua SD卡读入
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -331,14 +360,14 @@ int main(void)
   /* USER CODE BEGIN 3 */
 		HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
 		//HAL_GPIO_WritePin(LED_RED_GPIO_Port,LED_RED_Pin,GPIO_PIN_SET);
-		//printf("ok ");
+		//xprintf("ok ");
 //		HAL_UART_Transmit(&huart6,ss,sizeof(*ss),3);
 //		DPRINTF("ddd ");
 //		HAL_ADC_Start(&hadc1);
 //		HAL_ADC_PollForConversion(&hadc1,50);//等待转换完成
 //		if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1),HAL_ADC_STATE_EOC_REG)){
 //		AD_value = HAL_ADC_GetValue(&hadc1);
-//			printf("%d ADC=%fv ",AD_value,AD_value*3.3/0xfff);
+//			xprintf("%d ADC=%fv ",AD_value,AD_value*3.3/0xfff);
 //		}
 		HAL_Delay(1000);
 		
@@ -487,7 +516,7 @@ void assert_failed(uint8_t* file, uint32_t line)
     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 	
 	while(1){
-		printf("Wrong parameters value: file %s on line %d\r\n", file, line);
+		xprintf("Wrong parameters value: file %s on line %d\r\n", file, line);
 		HAL_Delay(1000);
 	}
   /* USER CODE END 6 */
